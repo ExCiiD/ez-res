@@ -17,6 +17,22 @@ export const menuItems = [
     },
     {
         id: 3,
+        name: "Royale",
+        price: 13.00,
+        ingredients: ["Sauce tomate", "Jambon", "Champignons", "Mozzarella", "oeuf"],
+        imageUrl: "/images/reine.jpg",
+        category: "Pizza"
+    },
+    {
+        id: 4,
+        name: "savoyarde",
+        price: 14.00,
+        ingredients: ["crème fraiche", "Jambon", "Champignons", "Mozzarella", "pomme de terre"],
+        imageUrl: "/images/reine.jpg",
+        category: "Pizza"
+    },
+    {
+        id: 5,
         name: "Cheeseburger",
         price: 9.50,
         ingredients: ["Pain brioché", "Steak haché", "Cheddar", "Salade", "Tomate"],
@@ -24,7 +40,7 @@ export const menuItems = [
         category: "Burger"
     },
     {
-        id: 4,
+        id: 6,
         name: "Coca-Cola",
         price: 2.50,
         ingredients: ["Bouteille 33cl"],
