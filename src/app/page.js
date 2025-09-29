@@ -9,6 +9,19 @@ export default function Home() {
 
   const [cart, setCart] = useState([]); // L'état initial est un tableau vide []
 
+  const [selectedCategory, setSelectedCategory] = useState("all");//l état initial est "all" afin d'fficher tous les articles par défaut.
+
+  // Extraire les catégories uniques du menuItems
+  // Utilisation de Set pour obtenir des valeurs uniques
+  // On ajoute "all" pour afficher tous les articles
+  // Spread operator ... pour convertir le Set en tableau
+  const Categories = ["all", ...new Set(menuItems.map(item => item.category))];
+
+  const filteredMenuItems = selectedCategory === "all"
+    ? menuItems
+    : menuItems.filter(item => item.category === selectedCategory);
+
+  // Fonction pour ajouter un article au panier 
   const handleAddToCart = (itemToAdd) => {
 
     // On vas chercher si l'article est déjà dans le panier
@@ -30,6 +43,7 @@ export default function Home() {
     }
   };
 
+  // Fonction pour supprimer un article du panier
   const handleRemoveFromCart = (itemToRemove) => {
     const existingItem = cart.find((itemInCart) => itemInCart.id === itemToRemove.id);
     if (existingItem) {
@@ -50,7 +64,6 @@ export default function Home() {
   };
 
   // Fonction pour vider le panier
-
   const handleClearCart = () => {
     setCart([]); // Réinitialise le panier à un tableau vide
     alert("Le panier a été vidé !");
@@ -62,8 +75,22 @@ export default function Home() {
 
       <main className="w-2/3 p-8">
         <h1 className="text-4xl font-bold text-center mb-8">Notre Menu</h1>
+        <div className="bg-gray-500 flex justify-center mb-8 rounded-lg p-4">
+          <div className="ml-8 flex gap-4 flex-wrap">
+            {Categories.map((category, index) => (
+              <button
+                key={index}
+                className={`px-4 py-2 rounded-full ${selectedCategory === category ? "bg-red-500 text-white" : "bg-gray-300 text-gray-800"
+                  } hover:bg-red-600 hover:text-white transition-colors`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {menuItems.map(item => (
+          {filteredMenuItems.map(item => (
             <FoodCard
               key={item.id}
               {...item}
@@ -77,7 +104,7 @@ export default function Home() {
         </button> 
       </main>
 
-      <aside className="w-1/3 p-8 bg-white h-screen sticky top-0">
+      <aside className="w-1/3 p-8 h-screen sticky top-0">
         {/* 2. On utilise le composant Cart et on lui passe l'état du panier */}
         <Cart
           cartItems={cart}
