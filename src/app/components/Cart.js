@@ -5,6 +5,29 @@ export default function cart({ cartItems, onRemoveItem }) {
     //pour chaque item dans le panier, on ajoute son prix au total (acc)
     const total = cartItems.reduce((acc,currentItem)=>acc + (currentItem.price * currentItem.quantity), 0);
 
+    const handleCheckout = async () => {
+        try {
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Très important pour que le serveur comprenne
+                },
+                body: JSON.stringify(cartItems),
+            });
+            if (response.ok) {
+                const data = await response.json(); // On peut utiliser la réponse du serveur si nécessaire
+                console.log(data.message);
+                alert("Commande passée avec succès!");
+            } else {
+                console.error("Erreur lors de la commande");
+                alert("Erreur lors de la commande. Veuillez réessayer.");
+            }
+        } catch (error) {
+            console.error("Erreur réseau:", error);
+            alert("Erreur réseau. Veuillez vérifier votre connexion.");
+        }
+    };
+
     return (
         <div className="bg-gray-600 p-4 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold border-b pb-2 mb-4">Votre Commande</h2>
@@ -16,8 +39,8 @@ export default function cart({ cartItems, onRemoveItem }) {
                 <ul>
                     {cartItems.map((item, index) => (
                         <li key={index} className="flex justify-between items-center mb-2">
-                            <span>{item.name} x {item.quantity}</span>
-                            <span>{item.price.toFixed(2)} €</span>
+                            <span>{item.name} </span>
+                            <span>{item.price.toFixed(2)} € x {item.quantity}</span>
                             <button className="bg-red-500 text-white px-2 py-1 rounded-full hover:bg-red-600" onClick={() => onRemoveItem(item)}>Supprimer</button>    
                         </li>
                     ))}
@@ -32,7 +55,8 @@ export default function cart({ cartItems, onRemoveItem }) {
                         {/* .toFixed(2) pour afficher 2 décimales, ex: 12.00 € */}
                         <span>{total.toFixed(2)} €</span>
                     </p>
-                    <button className="bg-green-500 text-white w-full py-2 rounded-lg mt-4 hover:bg-green-600">
+                    <button className="bg-green-500 text-white w-full py-2 rounded-lg mt-4 hover:bg-green-600"
+                        onClick={handleCheckout}>
                         Payer
                     </button>
                 </div>
